@@ -1,11 +1,12 @@
 package hello.jdbc.exception.basic;
 
+import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.net.ConnectException;
 import java.sql.SQLException;
 
+@Slf4j
 public class UnCheckedAppTest {
 
     @Test
@@ -13,6 +14,16 @@ public class UnCheckedAppTest {
         Controller controller = new Controller();
         Assertions.assertThatThrownBy(() -> controller.request())
                 .isInstanceOf(Exception.class);
+    }
+
+    @Test
+    void printEx() {
+        Controller controller = new Controller();
+        try {
+            controller.request();
+        } catch (Exception e) {
+            log.info("ex", e);
+        }
     }
 
     static class Controller {
@@ -45,6 +56,9 @@ public class UnCheckedAppTest {
                 runSQL();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
+//                throw new RuntimeException(); // 이렇게 하면 stackTrace가 남지 않음
+                // -> SQLException이라면 DB에서 넘어온 문제가 보이지만 (e)로 전달해 원래 에러를 넘기지 않으면 해당 정보가 사라지게 됨
+                // -> 예외를 전달할 경우 기존 예외를 포함하기!
             }
         }
 
@@ -61,6 +75,10 @@ public class UnCheckedAppTest {
     }
 
     static class RuntimeSQLException extends RuntimeException {
+        public RuntimeSQLException() {
+        }
+
+        // 기존 예외를 가질 수 있게 만들어줌
         public RuntimeSQLException(Throwable cause) {
             super(cause);
         }
