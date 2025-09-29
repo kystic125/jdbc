@@ -1,9 +1,6 @@
 package hello.jdbc.service;
 
-import hello.jdbc.Repository.MemberRepository;
-import hello.jdbc.Repository.MemberRepositoryV3;
-import hello.jdbc.Repository.MemberRepositoryV4_1;
-import hello.jdbc.Repository.MemberRepositoryV4_2;
+import hello.jdbc.Repository.*;
 import hello.jdbc.domain.Member;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
@@ -52,7 +49,8 @@ class MemberServiceV4Test {
         @Bean
         MemberRepository memberRepository() {
 //            return new MemberRepositoryV4_1(dataSource);
-              return new MemberRepositoryV4_2(dataSource);
+//            return new MemberRepositoryV4_2(dataSource);
+            return new MemberRepositoryV5(dataSource);
         }
 
         @Bean
